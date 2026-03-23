@@ -1,0 +1,148 @@
+{
+  "info": {
+    "name": "Parking System API",
+    "_postman_id": "parking-system-api-collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Add Parking Slot",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/admin/slots",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["admin", "slots"]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"slotId\": \"S1\",\n  \"slotType\": \"CAR\",\n  \"status\": \"AVAILABLE\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get All Slots",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/slots",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["slots"]
+        },
+        "header": []
+      }
+    },
+    {
+      "name": "Get Available Slots",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/slots/available",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["slots", "available"]
+        },
+        "header": []
+      }
+    },
+    {
+      "name": "Vehicle Entry",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/parking/entry",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["parking", "entry"]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ticketId\": \"T1\",\n  \"vehicle\": {\n    \"vehicleNumber\": \"KA01AB1234\",\n    \"vehicleType\": \"CAR\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Vehicle Exit",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/parking/exit/T1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["parking", "exit", "T1"]
+        },
+        "header": []
+      }
+    },
+    {
+      "name": "Create Payment",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/payments",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["payments"]
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"paymentId\": \"P1\",\n  \"amount\": 50,\n  \"paymentStatus\": \"COMPLETED\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Tickets Report",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/reports/tickets",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["reports", "tickets"]
+        },
+        "header": []
+      }
+    },
+    {
+      "name": "Revenue Report",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/reports/revenue",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["reports", "revenue"]
+        },
+        "header": []
+      }
+    }
+  ]
+}

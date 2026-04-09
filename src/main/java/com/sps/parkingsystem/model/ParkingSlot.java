@@ -19,6 +19,7 @@ public class ParkingSlot {
     @Id
     private String slotId;
     private String slotType;
+
     @Enumerated(EnumType.STRING)
     private SlotStatus status;
 }

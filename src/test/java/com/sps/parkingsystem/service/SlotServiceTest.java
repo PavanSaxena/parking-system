@@ -30,9 +30,7 @@ class SlotServiceTest {
     @Test
     void getAvailableSlotsReturnsOnlyAvailable() {
         ParkingSlot s1 = new ParkingSlot("S1", "CAR", SlotStatus.AVAILABLE);
-        ParkingSlot s2 = new ParkingSlot("S2", "CAR", SlotStatus.OCCUPIED);
-
-        when(slotRepository.findAll()).thenReturn(List.of(s1, s2));
+        when(slotRepository.findByStatus(SlotStatus.AVAILABLE)).thenReturn(List.of(s1));
 
         List<ParkingSlot> available = slotService.getAvailableSlots();
         assertEquals(1, available.size());
@@ -57,4 +55,5 @@ class SlotServiceTest {
         assertEquals(4L, stats.getOccupiedSlots());
     }
 }
+
 

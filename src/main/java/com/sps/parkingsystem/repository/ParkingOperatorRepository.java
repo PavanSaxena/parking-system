@@ -1,4 +1,7 @@
 package com.sps.parkingsystem.repository;
 
-public interface ParkingOperatorRepository {
+import com.sps.parkingsystem.model.ParkingOperator;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ParkingOperatorRepository extends JpaRepository<ParkingOperator, String> {
 }

@@ -9,6 +9,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     private String userId;
@@ -16,4 +20,12 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

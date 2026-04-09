@@ -1,5 +1,6 @@
 package com.sps.parkingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Vehicle {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private VehicleOwner owner;
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicle")
     private List<ParkingTicket> tickets;
 }

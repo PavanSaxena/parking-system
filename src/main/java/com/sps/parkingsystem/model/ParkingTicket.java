@@ -1,5 +1,7 @@
 package com.sps.parkingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sps.parkingsystem.enums.SlotStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -10,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -28,6 +29,7 @@ public class ParkingTicket {
     private ParkingSlot slot;
     @ManyToOne
     private ParkingOperator operator;
+    @JsonIgnore
     @OneToOne(mappedBy = "ticket")
     private Payment payment;
 }

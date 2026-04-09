@@ -1,11 +1,8 @@
 package com.sps.parkingsystem.service;
 
 import com.sps.parkingsystem.exception.InvalidParkingStateException;
-import com.sps.parkingsystem.model.ParkingRate;
 import com.sps.parkingsystem.model.ParkingTicket;
 import com.sps.parkingsystem.model.Payment;
-import com.sps.parkingsystem.model.Vehicle;
-import com.sps.parkingsystem.repository.ParkingRateRepository;
 import com.sps.parkingsystem.repository.ParkingTicketRepository;
 import com.sps.parkingsystem.repository.PaymentRepository;
 import org.junit.jupiter.api.Test;
@@ -30,7 +27,7 @@ class PaymentServiceTest {
     @Mock
     private ParkingTicketRepository ticketRepository;
     @Mock
-    private ParkingRateRepository rateRepository;
+    private FeeService feeService;
 
     @InjectMocks
     private PaymentService paymentService;
@@ -65,26 +62,19 @@ class PaymentServiceTest {
 
     @Test
     void processPaymentCalculatesRoundedHourlyAmount() {
-        Vehicle vehicle = new Vehicle();
-        vehicle.setVehicleType("CAR");
-
         ParkingTicket ticket = new ParkingTicket();
         ticket.setTicketId("T1");
-        ticket.setVehicle(vehicle);
         ticket.setEntryTime(LocalDateTime.now().minusMinutes(61));
         ticket.setExitTime(LocalDateTime.now());
 
-        ParkingRate rate = new ParkingRate();
-        rate.setVehicleType("CAR");
-        rate.setHourlyRate(50.0);
-
         when(ticketRepository.findById("T1")).thenReturn(Optional.of(ticket));
         when(paymentRepository.findByTicketTicketId("T1")).thenReturn(Optional.empty());
-        when(rateRepository.findByVehicleType("CAR")).thenReturn(Optional.of(rate));
+        when(feeService.calculateFee(ticket)).thenReturn(100.0);
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Payment payment = paymentService.processPayment("T1");
         assertEquals(100.0, payment.getAmount());
     }
 }
+
 

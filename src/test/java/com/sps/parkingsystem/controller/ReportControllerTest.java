@@ -1,10 +1,12 @@
 package com.sps.parkingsystem.controller;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.sps.parkingsystem.service.ReportService;
 
@@ -13,17 +15,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReportController.class)
+@ExtendWith(MockitoExtension.class)
 class ReportControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private ReportService reportService;
+
+    @InjectMocks
+    private ReportController reportController;
 
     @Test
     void occupancyEndpointReturnsExpectedMetrics() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(reportController).build();
+
         when(reportService.getTotalSlots()).thenReturn(10L);
         when(reportService.getOccupiedSlots()).thenReturn(4L);
         when(reportService.getOccupancyPercentage()).thenReturn(40.0);
@@ -35,4 +39,5 @@ class ReportControllerTest {
                 .andExpect(jsonPath("$.occupancyPercentage").value(40.0));
     }
 }
+
 

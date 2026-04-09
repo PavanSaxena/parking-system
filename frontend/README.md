@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+# Parking System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Production-quality React + TypeScript dashboard for the Spring Boot Parking System backend.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Vite + React + TypeScript
+- Tailwind CSS
+- React Router
+- React Query
+- Axios with timeout + retries
 
-## React Compiler
+## Environment Configuration
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Copy the sample environment file:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Default variable:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```dotenv
+VITE_API_BASE_URL=http://localhost:8080/api
 ```
+
+During local development, Vite proxy rewrites `/api/*` to `http://localhost:8080/*`.
+
+## Install and Run
+
+```bash
+npm install
+npm run dev
+```
+
+## Application Routes
+
+- `/`
+- `/dashboard`
+- `/slots`
+- `/booking`
+- `/payments`
+- `/reports`
+
+## Project Structure
+
+```text
+src/
+  app/
+  components/
+  constants/
+  hooks/
+  pages/
+  services/
+  styles/
+  types/
+  utils/
+```
+
+## Backend Connection Notes
+
+- Ensure backend is running on `http://localhost:8080`.
+- API endpoints are centralized in `src/constants/api.ts`.
+- Components do not call HTTP directly; they use hooks + service abstractions.
+

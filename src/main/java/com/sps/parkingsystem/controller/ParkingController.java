@@ -1,7 +1,9 @@
 package com.sps.parkingsystem.controller;
 
 import com.sps.parkingsystem.dto.ParkingEntryRequest;
-import com.sps.parkingsystem.model.ParkingTicket;
+import com.sps.parkingsystem.dto.ParkingExitRequest;
+import com.sps.parkingsystem.dto.response.ParkingTicketResponse;
+import com.sps.parkingsystem.mapper.ResponseMapper;
 import com.sps.parkingsystem.service.ParkingService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +15,17 @@ public class ParkingController {
     public ParkingController(ParkingService parkingService) {
         this.parkingService = parkingService;
     }
+
     @PostMapping("/entry")
-    public ParkingTicket enterVehicle(@Valid @RequestBody ParkingEntryRequest request){
-        return parkingService.enterVehicle(
+    public ParkingTicketResponse enterVehicle(@Valid @RequestBody ParkingEntryRequest request){
+        return ResponseMapper.toParkingTicketResponse(parkingService.enterVehicle(
                 request.getVehicleNumber(),
-                request.getSlotId(),
                 request.getOperatorId()
-        );
+        ));
     }
-    @PostMapping("/exit/{ticketId}")
-    public ParkingTicket exitVehicle(@PathVariable String ticketId){
-        return parkingService.exitVehicle(ticketId);
+
+    @PostMapping("/exit")
+    public ParkingTicketResponse exitVehicle(@Valid @RequestBody ParkingExitRequest request){
+        return ResponseMapper.toParkingTicketResponse(parkingService.exitVehicle(request.getTicketId()));
     }
 }

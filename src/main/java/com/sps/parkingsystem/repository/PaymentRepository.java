@@ -2,11 +2,12 @@ package com.sps.parkingsystem.repository;
 
 import com.sps.parkingsystem.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, String> {
-    Optional<Payment> findByTicketTicketId(String ticketId);
+    @Query("SELECT SUM(p.amount) FROM Payment p WHERE p.paymentStatus = 'COMPLETED'")
+    Double getTotalRevenue();
+    java.util.Optional<Payment> findByTicketTicketId(String ticketId);
 }

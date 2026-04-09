@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ParkingRateRepository extends JpaRepository<ParkingRate, String> {
-    Optional<ParkingRate> findByVehicleType(String vehileType);
+    Optional<ParkingRate> findByVehicleType(String vehicleType);
 }

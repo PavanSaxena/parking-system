@@ -16,6 +16,9 @@ export type VehicleType = 'MINI' | 'SEDAN' | 'SUV'
 
 export interface AuthTokenDTO {
   token: string
+  userId?: string
+  userName?: string
+  email?: string
 }
 
 export interface LoginRequest {

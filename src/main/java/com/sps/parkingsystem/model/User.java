@@ -20,12 +20,4 @@ public class User {
     private String phoneNumber;
     private String email;
     private String password;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 }

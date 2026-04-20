@@ -1,5 +1,5 @@
 import { API } from '../constants/api'
-import type { BookingViewModel, CreateBookingRequest, EndBookingRequest, ParkingTicketDTO } from '../types/booking'
+import type { CreateBookingRequest, EndBookingRequest, ParkingTicketDTO } from '../types/booking'
 import type { SlotViewModel } from '../types/slot'
 import { apiClient } from './apiClient'
 import { mapUiVehicleType, toBookingViewModel } from './adapters'

@@ -1,5 +1,5 @@
 import { API } from '../constants/api'
-import type { BookingViewModel, ParkingTicketDTO } from '../types/booking'
+import type { ParkingTicketDTO } from '../types/booking'
 import type { PaymentDTO } from '../types/payment'
 import type { OccupancyDTO, ReportsPayload } from '../types/report'
 import type { SlotViewModel } from '../types/slot'

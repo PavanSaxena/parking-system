@@ -1,6 +1,10 @@
 export interface ApiErrorResponse {
   error?: string
   message?: string
+  details?: string[]
+  errors?: string[]
+  status?: number
+  path?: string
   timestamp?: string
 }
 

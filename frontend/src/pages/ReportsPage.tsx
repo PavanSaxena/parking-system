@@ -28,8 +28,10 @@ export const ReportsPage = () => {
 
   const filteredPayments = useMemo(
     () =>
-      (reportsQuery.data?.payments ?? []).filter((payment) =>
-        isWithinDateRange(payment.paymentTime, fromDate || undefined, toDate || undefined),
+      (reportsQuery.data?.payments ?? []).filter(
+        (payment) =>
+          payment.paymentTime !== null &&
+          isWithinDateRange(payment.paymentTime, fromDate || undefined, toDate || undefined),
       ),
     [reportsQuery.data?.payments, fromDate, toDate],
   )

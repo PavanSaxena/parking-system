@@ -50,7 +50,8 @@ export const toBookingViewModel = (
   slotMap: Map<string, SlotViewModel>,
 ): BookingViewModel => {
   const slot = slotMap.get(ticket.slotId)
-  const durationMinutes = calculateDurationMinutes(ticket.entryTime, ticket.exitTime)
+  const exitTime = ticket.exitTime ?? null
+  const durationMinutes = calculateDurationMinutes(ticket.entryTime, exitTime)
   const totalAmount = durationMinutes !== null && slot ? (durationMinutes / 60) * slot.pricePerHour : null
 
   return {
@@ -59,10 +60,11 @@ export const toBookingViewModel = (
     vehicleType: slot?.vehicleType ?? fallbackVehicleType,
     slotId: ticket.slotId,
     startTime: ticket.entryTime,
-    endTime: ticket.exitTime,
+    endTime: exitTime,
+    exitTime,
     durationMinutes,
     totalAmount,
-    bookingStatus: ticket.exitTime ? 'COMPLETED' : 'ACTIVE',
+    bookingStatus: exitTime ? 'COMPLETED' : 'ACTIVE',
     paymentStatus: ticket.paymentStatus,
   }
 }

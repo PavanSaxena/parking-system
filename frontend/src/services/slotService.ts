@@ -1,5 +1,5 @@
 import { API } from '../constants/api'
-import type { CreateSlotRequest, RateDTO, SlotDTO, SlotViewModel, UpdateSlotRequest } from '../types/slot'
+import type { CreateSlotRequest, RateDTO, SlotDTO, UpdateSlotRequest } from '../types/slot'
 import { apiClient } from './apiClient'
 import { mapUiVehicleType, toSlotViewModel } from './adapters'
 
@@ -36,8 +36,7 @@ export const slotService = {
     })
 
     const allSlots = await slotService.getSlots()
-    const created = allSlots.find((slot) => slot.slotNumber === payload.slotNumber) ?? allSlots[0]
-    return created
+    return allSlots.find((slot) => slot.slotNumber === payload.slotNumber) ?? allSlots[0]
   },
 
   updateSlot: async (payload: UpdateSlotRequest) => {

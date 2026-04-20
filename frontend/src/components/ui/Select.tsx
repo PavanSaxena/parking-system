@@ -7,9 +7,20 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string
   options: SelectOption[]
   error?: string
+  placeholderLabel?: string
+  showPlaceholderOption?: boolean
 }
 
-export const Select = ({ label, options, className, error, id, ...props }: SelectProps) => {
+export const Select = ({
+  label,
+  options,
+  className,
+  error,
+  id,
+  placeholderLabel = '-Select-',
+  showPlaceholderOption = true,
+  ...props
+}: SelectProps) => {
   const elementId = id ?? label.toLowerCase().replace(/\s+/g, '-')
 
   return (
@@ -24,8 +35,13 @@ export const Select = ({ label, options, className, error, id, ...props }: Selec
         )}
         {...props}
       >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
+        {showPlaceholderOption ? (
+          <option value="" disabled>
+            {placeholderLabel}
+          </option>
+        ) : null}
+        {options.map((option, index) => (
+          <option key={`${option.value}-${index}`} value={option.value}>
             {option.label}
           </option>
         ))}

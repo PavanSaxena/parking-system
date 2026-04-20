@@ -7,7 +7,8 @@ export interface ParkingTicketDTO {
   vehicleNumber: string
   slotId: string
   entryTime: string
-  exitTime: string | null
+  exitTime?: string | null
+  totalAmount?: number | null
   paymentStatus: PaymentStatus
 }
 
@@ -29,6 +30,7 @@ export interface BookingViewModel {
   slotId: string
   startTime: string
   endTime: string | null
+  exitTime: string | null
   durationMinutes: number | null
   totalAmount: number | null
   bookingStatus: BookingStatus

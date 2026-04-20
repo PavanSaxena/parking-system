@@ -1,7 +1,5 @@
 package com.sps.parkingsystem.service;
 
-public class Slpackage com.sps.parkingsystem.service;
-
 import com.sps.parkingsystem.enums.SlotStatus;
 import com.sps.parkingsystem.dto.response.SlotStatisticsResponse;
 import com.sps.parkingsystem.exception.ResourceNotFoundException;
@@ -53,6 +51,4 @@ public class SlotService {
         long occupied = slotRepository.countByStatus(SlotStatus.OCCUPIED);
         return new SlotStatisticsResponse(total, available, occupied);
     }
-}otService {
-    
 }

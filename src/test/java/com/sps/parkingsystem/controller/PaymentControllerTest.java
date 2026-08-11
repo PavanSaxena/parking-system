@@ -1,6 +1,7 @@
 package com.sps.parkingsystem.controller;
 
 import com.sps.parkingsystem.enums.PaymentStatus;
+import com.sps.parkingsystem.exception.GlobalExceptionHandler;
 import com.sps.parkingsystem.model.ParkingTicket;
 import com.sps.parkingsystem.model.Payment;
 import com.sps.parkingsystem.service.PaymentService;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.time.LocalDateTime;
 
@@ -30,9 +32,16 @@ class PaymentControllerTest {
     @InjectMocks
     private PaymentController paymentController;
 
+    private MockMvc buildMockMvc() {
+        return MockMvcBuilders.standaloneSetup(paymentController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setValidator(new LocalValidatorFactoryBean())
+                .build();
+    }
+
     @Test
     void processPaymentReturnsResponseDto() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(paymentController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         ParkingTicket ticket = new ParkingTicket();
         ticket.setTicketId("T1");
@@ -53,6 +62,17 @@ class PaymentControllerTest {
                 .andExpect(jsonPath("$.paymentId").value("P1"))
                 .andExpect(jsonPath("$.ticketId").value("T1"))
                 .andExpect(jsonPath("$.paymentStatus").value("COMPLETED"));
+    }
+
+    @Test
+    void processPaymentValidationFailsForBlankTicketId() throws Exception {
+        MockMvc mockMvc = buildMockMvc();
+
+        mockMvc.perform(post("/payments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"ticketId\":\"   \"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").exists());
     }
 }
 

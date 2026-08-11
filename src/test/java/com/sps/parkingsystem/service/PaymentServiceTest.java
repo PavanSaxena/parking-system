@@ -1,6 +1,8 @@
 package com.sps.parkingsystem.service;
 
+import com.sps.parkingsystem.enums.PaymentStatus;
 import com.sps.parkingsystem.exception.InvalidParkingStateException;
+import com.sps.parkingsystem.exception.ResourceNotFoundException;
 import com.sps.parkingsystem.model.ParkingTicket;
 import com.sps.parkingsystem.model.Payment;
 import com.sps.parkingsystem.repository.ParkingTicketRepository;
@@ -33,6 +35,13 @@ class PaymentServiceTest {
     private PaymentService paymentService;
 
     @Test
+    void processPaymentThrowsWhenTicketMissing() {
+        when(ticketRepository.findById("T1")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment("T1"));
+    }
+
+    @Test
     void processPaymentThrowsWhenVehicleNotExited() {
         ParkingTicket ticket = new ParkingTicket();
         ticket.setTicketId("T1");
@@ -41,6 +50,25 @@ class PaymentServiceTest {
         when(ticketRepository.findById("T1")).thenReturn(Optional.of(ticket));
 
         assertThrows(InvalidParkingStateException.class, () -> paymentService.processPayment("T1"));
+    }
+
+    @Test
+    void processPaymentCreatesCompletedPaymentWhenEligible() {
+        ParkingTicket ticket = new ParkingTicket();
+        ticket.setTicketId("T1");
+        ticket.setEntryTime(LocalDateTime.now().minusHours(1));
+        ticket.setExitTime(LocalDateTime.now());
+
+        when(ticketRepository.findById("T1")).thenReturn(Optional.of(ticket));
+        when(paymentRepository.findByTicketTicketId("T1")).thenReturn(Optional.empty());
+        when(feeService.calculateFee(ticket)).thenReturn(120.0);
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Payment payment = paymentService.processPayment("T1");
+
+        assertEquals(120.0, payment.getAmount());
+        assertEquals(PaymentStatus.COMPLETED, payment.getPaymentStatus());
+        assertEquals("T1", payment.getTicket().getTicketId());
     }
 
     @Test

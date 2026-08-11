@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +36,30 @@ class SlotServiceTest {
         List<ParkingSlot> available = slotService.getAvailableSlots();
         assertEquals(1, available.size());
         assertEquals("S1", available.get(0).getSlotId());
+    }
+
+    @Test
+    void occupySlotMarksSlotOccupiedAndSaves() {
+        ParkingSlot slot = new ParkingSlot("S1", "CAR", SlotStatus.AVAILABLE);
+        when(slotRepository.findById("S1")).thenReturn(Optional.of(slot));
+        when(slotRepository.save(slot)).thenReturn(slot);
+
+        ParkingSlot updated = slotService.occupySlot("S1");
+
+        assertEquals(SlotStatus.OCCUPIED, updated.getStatus());
+        verify(slotRepository).save(slot);
+    }
+
+    @Test
+    void freeSlotMarksSlotAvailableAndSaves() {
+        ParkingSlot slot = new ParkingSlot("S1", "CAR", SlotStatus.OCCUPIED);
+        when(slotRepository.findById("S1")).thenReturn(Optional.of(slot));
+        when(slotRepository.save(slot)).thenReturn(slot);
+
+        ParkingSlot updated = slotService.freeSlot("S1");
+
+        assertEquals(SlotStatus.AVAILABLE, updated.getStatus());
+        verify(slotRepository).save(slot);
     }
 
     @Test

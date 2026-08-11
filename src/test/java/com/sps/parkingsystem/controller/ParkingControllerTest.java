@@ -1,5 +1,6 @@
 package com.sps.parkingsystem.controller;
 
+import com.sps.parkingsystem.exception.GlobalExceptionHandler;
 import com.sps.parkingsystem.model.ParkingSlot;
 import com.sps.parkingsystem.model.ParkingTicket;
 import com.sps.parkingsystem.model.Vehicle;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.time.LocalDateTime;
 
@@ -30,9 +32,16 @@ class ParkingControllerTest {
     @InjectMocks
     private ParkingController parkingController;
 
+    private MockMvc buildMockMvc() {
+        return MockMvcBuilders.standaloneSetup(parkingController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .setValidator(new LocalValidatorFactoryBean())
+                .build();
+    }
+
     @Test
     void entryReturnsTicketResponseDto() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(parkingController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleNumber("KA01AB1234");
@@ -58,8 +67,19 @@ class ParkingControllerTest {
     }
 
     @Test
+    void entryValidationFailsForBlankVehicleNumber() throws Exception {
+        MockMvc mockMvc = buildMockMvc();
+
+        mockMvc.perform(post("/parking/entry")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"vehicleNumber\":\"   \",\"operatorId\":\"OP-1\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").exists());
+    }
+
+    @Test
     void exitReturnsTicketResponseDto() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(parkingController).build();
+        MockMvc mockMvc = buildMockMvc();
 
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleNumber("KA01AB1234");

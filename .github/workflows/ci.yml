@@ -13,6 +13,20 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: parking_system
+          MYSQL_ROOT_PASSWORD: parkingpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pparkingpassword"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,6 +42,10 @@ jobs:
         run: chmod +x mvnw
 
       - name: Run tests and generate coverage
+        env:
+          DB_URL: jdbc:mysql://127.0.0.1:3306/parking_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          DB_USER: root
+          DB_PASSWORD: parkingpassword
         run: ./mvnw clean verify
 
       - name: Upload JaCoCo report
